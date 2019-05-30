@@ -190,3 +190,4 @@ dmypy.json
 .pyre/
 .idea/*
 .ipynb
+input
