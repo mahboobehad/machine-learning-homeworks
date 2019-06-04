@@ -1,6 +1,6 @@
 # In the name of God
 import numpy as np
-from utils import bipolar, generate_data_set_from_file
+from utils import binary, generate_data_set_from_file
 
 
 class OneLayerPerceptronNet:
@@ -34,7 +34,7 @@ def solve_first_hw():
     for t in target_chars:
         print("target char is {}".format(t))
         data, label = generate_data_set_from_file('./input/hw1_input.txt', target_character=t)
-        net = OneLayerPerceptronNet(data[0].shape[0], 1, .8, activation_function=bipolar)
+        net = OneLayerPerceptronNet(data[0].shape[0], 1, .8, activation_function=binary)
         net.learn(data, label, epoch=500)
         for d in data:
             print(f'result of classification is {net.classify(d)}')

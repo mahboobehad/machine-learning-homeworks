@@ -4,15 +4,15 @@ import re
 import numpy as np
 
 
-def ac_func(x):
-    return -1 if x < .5 else 0 if -.5 <= x <= .5 else 1
+def bipolar(x, theta):
+    return -1 if x < theta else x if x == theta else 1
 
 
-def bipolar(x):
+def binary(x):
     return -1 if x < 0 else 1
 
 
-def generate_data_set_from_file(file_path, target_character='A'):
+def generate_data_set_from_file(file_path, target_character='A', input_map=lambda x: 0 if x == '.' else 1):
     def read_file():
         with open(file_path) as f:
             lines = f.readlines()
@@ -32,6 +32,6 @@ def generate_data_set_from_file(file_path, target_character='A'):
         title = title_pattern.search(m).group(0).strip()
         target.append(np.array([1]) if target_character == title[~0] else np.array([-1]))
         map_ = map_pattern.findall(m)
-        data.append(np.array(list(map(lambda x: 0 if x == '.' else 1, map_))))
+        data.append(np.array(list(map(input_map, map_))))
     re.purge()
     return data, target
