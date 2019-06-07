@@ -63,5 +63,3 @@ def data_to_map(data):
     return units_repr.lstrip()
 
 
-if __name__ == '__main__':
-    print(rectangular_neighbourhood(9, radius=1))
