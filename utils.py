@@ -35,3 +35,33 @@ def generate_data_set_from_file(file_path, target_character='A', input_map=lambd
         data.append(np.array(list(map(input_map, map_))))
     re.purge()
     return data, target
+
+
+def geometric_series(a_0, q):
+    while True:
+        yield a_0
+        a_0 *= q
+
+
+def linear_neighbourhood(center, radius):
+    return [center + r for r in range(-radius, radius + 1)]
+
+
+def rectangular_neighbourhood(center, radius):
+    return [center + i + j for i in range(-radius, radius + 1) for j in range(-radius, radius + 1)]
+
+
+def data_to_map(data):
+    units_repr = str()
+    for i in range(data.shape[0]):
+        if data[i] == 0:
+            units_repr += '. '
+        else:
+            units_repr += '# '
+        if (i + 1) % 7 == 0:
+            units_repr += '\n'
+    return units_repr.lstrip()
+
+
+if __name__ == '__main__':
+    print(rectangular_neighbourhood(9, radius=1))
