@@ -39,8 +39,18 @@ def generate_data_set_from_file(file_path, target_character='A', input_map=lambd
 
 def geometric_series(a_0, q):
     while True:
+        if not a_0:
+            raise StopIteration
         yield a_0
         a_0 *= q
+
+
+def linear_series(a_0, d):
+    while True:
+        if not a_0:
+            raise StopIteration
+        yield a_0
+        a_0 -= d
 
 
 def linear_neighbourhood(center, radius):
@@ -61,5 +71,3 @@ def data_to_map(data):
         if (i + 1) % 7 == 0:
             units_repr += '\n'
     return units_repr.lstrip()
-
-
