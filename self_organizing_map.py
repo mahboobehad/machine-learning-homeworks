@@ -3,13 +3,15 @@ from collections import defaultdict
 from math import sqrt
 
 import numpy as np
+import matplotlib.pyplot as plt
 
-from utils import geometric_series, generate_data_set_from_file, diamond_neighbourhood
+from utils import geometric_series, generate_data_set_from_file, diamond_neighbourhood, linear_neighbourhood, \
+    linear_series
 
 
 class SOM:
     def __init__(self, number_of_clusters, learning_rate_generator, neighbourhood_function, number_of_dimensions=1,
-                 rows=None, columns=None):
+                 rows=None, columns=None, max_iterations=100):
         self.weights = None
         self.number_of_clusters = number_of_clusters
         self.learning_rate_generator = learning_rate_generator
@@ -18,6 +20,7 @@ class SOM:
         self.neighbourhood_radius = self._max_count_of_neighbours(number_of_dimensions)
         self.rows = rows
         self.columns = columns
+        self.max_iterations = max_iterations
 
     def learn(self, input_data):
         self.weights = np.random.random_sample([input_data[0].shape[0], self.number_of_clusters]).T
@@ -27,18 +30,14 @@ class SOM:
             alpha = next(self.learning_rate_generator)
             for data in input_data:
                 winner_cluster = self.find_nearest_cluster(data)
-                self._update_weights(winner_cluster, data, alpha)
-
-            if iteration_counter == 200:
+                # self._update_weights(winner_cluster, data, alpha)
+                self._update_weight_column(winner_cluster, data, alpha)
+            if iteration_counter == self.max_iterations:
                 break
-            if not iteration_counter % 10:
-                self.neighbourhood_radius -= 1
-                if self.neighbourhood_radius <= 0:
-                    self.neighbourhood_radius = 1
 
     def _update_weights(self, cluster_index, data, alpha):
         if self.number_of_dimensions == 1:
-            neighbours = self.neighbourhood_function = self.neighbourhood_function(cluster_index, radius=1)
+            neighbours = self.neighbourhood_function(cluster_index, radius=1)
             for neighbour in neighbours:
                 index = cluster_index + neighbour
                 if not (0 < index < self.weights.shape[0]):
@@ -97,5 +96,49 @@ def cluster_characters():
             print(d)
 
 
+def solve_tsp():
+    cities = list()
+
+    def read_input():
+        with open('input/tsp_cities.in') as f:
+            for l in f.readlines():
+                x, y = list(map(float, l.split()))
+                cities.append(np.array([x, y]))
+
+    def find_tour():
+        cx, cy, x, y = list(), list(), list(), list()
+        colors = list()
+        for i, c in enumerate(cities):
+            winner = net.find_nearest_cluster(c)
+            x.append(net.weights[winner][0])
+            y.append(net.weights[winner][1])
+            cx.append(c[0])
+            cy.append(c[1])
+        x.append(x[0])
+        y.append(y[0])
+        return x, y, cx, cy
+
+    def plot_clusters():
+        x, y, cx, cy = find_tour()
+        plt.figure()
+        plt.scatter(cx, cy, s=120)
+        plt.scatter(x, y, s=60, c='y')
+        plt.plot(x, y, 'C3')
+        plt.title('tsp')
+        plt.show()
+
+    read_input()
+
+    net = SOM(number_of_clusters=len(cities) + 1,
+              learning_rate_generator=geometric_series(1, 0.999),
+              neighbourhood_function=linear_neighbourhood,
+              max_iterations=200)
+
+    net.learn(cities)
+
+    plot_clusters()
+
+
 if __name__ == '__main__':
-    cluster_characters()
+    # cluster_characters()
+    solve_tsp()
