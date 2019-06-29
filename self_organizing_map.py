@@ -1,4 +1,5 @@
 # In the name of God
+
 from collections import defaultdict
 from math import sqrt
 
@@ -30,8 +31,7 @@ class SOM:
             alpha = next(self.learning_rate_generator)
             for data in input_data:
                 winner_cluster = self.find_nearest_cluster(data)
-                # self._update_weights(winner_cluster, data, alpha)
-                self._update_weight_column(winner_cluster, data, alpha)
+                self._update_weights(winner_cluster, data, alpha)
             if iteration_counter == self.max_iterations:
                 break
 
@@ -107,7 +107,6 @@ def solve_tsp():
 
     def find_tour():
         cx, cy, x, y = list(), list(), list(), list()
-        colors = list()
         for i, c in enumerate(cities):
             winner = net.find_nearest_cluster(c)
             x.append(net.weights[winner][0])
@@ -140,5 +139,5 @@ def solve_tsp():
 
 
 if __name__ == '__main__':
-    # cluster_characters()
+    cluster_characters()
     solve_tsp()

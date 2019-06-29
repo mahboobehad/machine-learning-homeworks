@@ -54,7 +54,7 @@ def linear_series(a_0, d):
         if not a_0:
             raise StopIteration
         yield a_0
-        a_0 -= d
+        a_0 += d
 
 
 def linear_neighbourhood(center, radius):
